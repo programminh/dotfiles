@@ -185,7 +185,7 @@
       save-place-file (concat user-emacs-directory "places")
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
-
+(when true true);
 ;;; better-defaults.el ends here
 
 ;;; .emacs ends here
