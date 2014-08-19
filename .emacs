@@ -32,7 +32,7 @@
 
 ;; General project support
 (require 'projectile)
-(projectile-global-mode)
+(projectile-global-mode +1)
 (setq projectile-enable-caching nil
       projectile-globally-ignored-directories '("target"))
 (global-set-key "\C-cf" 'projectile-find-file)
@@ -62,6 +62,9 @@
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+
 
 (setq web-mode-engines-alist
       '(("php"    . "\\.phtml\\'")
@@ -89,7 +92,10 @@
 (define-key ac-completing-map "\r" nil)
 
 ;; Projectile find file
+
 (global-set-key (kbd "C-x p") 'projectile-find-file)
+;; Magit
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; Set indentation to 4 spaces
 (setq-default indent-tabs-mode nil) ; always replace tabs with spaces
@@ -108,6 +114,9 @@
   (set-face-attribute 'default nil :height 120))
 
 (load-theme 'zenburn t)
+
+(global-auto-revert-mode t)
+
 (provide 'emacs)
 
 ;;; better-defaults.el --- Fixing weird quirks and poor defaults
