@@ -1,200 +1,161 @@
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
+;; Configuration based heavily upon Howard Abrams emacs.org
+;; @link https://github.com/howardabrams/dot-files/blob/master/emacs.org
 
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; Create the following directories if it doesn't exists
+(let* ((subdirs '("elisp" "backups" "snippets" "ac-dict"))
+       (fulldirs (mapcar (lambda (d) (concat user-emacs-directory d)) subdirs)))
+  (dolist (dir fulldirs)
+    (when (not (file-exists-p dir))
+      (message "Make directory: %s" dir)
+      (make-directory dir))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; IDO & filecache: smart file name completion
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Add to load path packages that are not available on the package manager
+(add-to-list 'load-path (concat user-emacs-directory "elisp"))
+
+;; Initialize package manager
+(require 'package)
+(setq package-archives '(("org"       . "http://orgmode.org/elpa/")
+			 ("gnu"       . "http://elpa.gnu.org/packages/")
+			 ("melpa"     . "http://melpa.milkbox.net/packages/")
+			 ("marmalade" . "http://marmalade-repo.org/packages/")))
+(package-initialize)
+
+(defun ensure-package-installed (&rest packages)
+  "Assure every package is installed, ask for installation if it’s not. Return a list of installed packages or nil for every skipped package."
+    (mapcar
+     (lambda (package)
+       (if (package-installed-p package)
+	   nil
+	 (if (y-or-n-p (format "Package %s is missing. Install it? " package))
+	     (package-install package)
+	   package)))
+     packages))
+
+;; make sure to have downloaded archive description.
+;; Or use package-archive-contents as suggested by Nicolas Dudebout
+(or (file-exists-p package-user-dir)
+    (package-refresh-contents))
+
+(ensure-package-installed 'auto-complete
+			  'flx
+			  'flx-ido
+			  'flycheck
+			  'flycheck-color-mode-line
+			  'ido-vertical-mode
+			  'ido-ubiquitous
+			  'projectile
+			  'multiple-cursors
+			  'web-mode
+			  'js2-mode
+			  'smex
+			  'yasnippet
+                          'zenburn-theme)
+
+;; activate installed packages
+(package-initialize)
+
+;; Set indentation to 4 spaces
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(setq-default tab-always-indent 'complete)
+
+;; Display settings
+(setq initial-scratch-message "") ;; Uh, I know what Scratch is for
+(setq visible-bell t)             ;; Get rid of the beeps
+
+(unless (window-system)
+  (menu-bar-mode 0))              ;; No menus... but only in text mode
+
+(when (window-system)
+  (tool-bar-mode 0)               ;; Toolbars were only cool with XEmacs
+  (when (fboundp 'horizontal-scroll-bar-mode)
+    (horizontal-scroll-bar-mode -1))
+  (scroll-bar-mode -1))            ;; Scrollbars are waste screen estate
+
+(when (display-graphic-p)
+  (set-face-attribute 'default nil :font "Source Code Pro")
+  (set-face-attribute 'default nil :height 120)
+  (load-theme 'zenburn t))
+
+
+
+;; Ido
 (require 'ido)
-
-;; Improved flex matching
 (require 'flx-ido)
- 
-;; (setq ido-everywhere nil
-;;       ;; ido-enable-flex-matching t
-;;       ido-create-new-buffer 'always
-;;       ido-file-extensions-order '(".java" ".js" ".el" ".xml")
-;;       ido-use-filename-at-point 'guess
-;;       ido-use-faces t
-;;       )
-(ido-mode 'buffer)
-
-;; Vertical completion menu
 (require 'ido-vertical-mode)
-(ido-vertical-mode)
-
-;; IDO support pretty much everwhere, including eclim-java-implement
 (require 'ido-ubiquitous)
-(ido-ubiquitous)
 
-;; General project support
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(flx-ido-mode 1)
+(ido-mode 'buffer)
+(ido-vertical-mode)
+(ido-ubiquitous)
+(setq ido-vertical-define-keys 'C-n-C-p-up-and-down) ;; Up and down arrows
+
+;; Projectile
 (require 'projectile)
-(projectile-global-mode +1)
+(projectile-global-mode)
 (setq projectile-enable-caching nil
       projectile-globally-ignored-directories '("target"))
-(global-set-key "\C-cf" 'projectile-find-file)
+(global-set-key (kbd "C-x p") 'projectile-find-file)
 
 ;; Enhanced M-x
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
 
+;; Multiple cursor
 (require 'multiple-cursors)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 
-;; Comment or uncomment current line
-(defun toggle-comment-on-line ()
-  "comment or uncomment current line"
-  (interactive)
-  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-
-(global-set-key (kbd "C-/") 'toggle-comment-on-line)
-
-;; Web modes
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
-
-
-(setq web-mode-engines-alist
-      '(("php"    . "\\.phtml\\'")
-        ("blade"  . "\\.blade\\.")))
-
-(setq web-mode-markup-indent-offset 4)
-(setq web-mode-css-indent-offset 4)
-(setq web-mode-code-indent-offset 4)
-(setq web-mode-indent-style-offset 4)
-
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-
-;; Snippets
-(require 'yasnippet)
-(yas-global-mode)
-
-;; Autocomplete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20140519.650/dict")
-(ac-config-default)
-(add-to-list 'ac-modes 'web-mode)
-(ac-set-trigger-key "TAB")
-(ac-set-trigger-key "<tab>")
-(define-key ac-completing-map [return] nil)
-(define-key ac-completing-map "\r" nil)
-
-;; Projectile find file
-
-(global-set-key (kbd "C-x p") 'projectile-find-file)
 ;; Magit
 (global-set-key (kbd "C-x g") 'magit-status)
 
-;; Set indentation to 4 spaces
-(setq-default indent-tabs-mode nil) ; always replace tabs with spaces
-(setq-default tab-width 4) ; set tab width to 4 for all buffers
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(menu-bar-mode t)
- '(tab-width 4))
-(setq c-basic-offset 4)
+;; Set backup to a single point
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name
+		 (concat user-emacs-directory "backups")))))
 
-(when (display-graphic-p)
-  (set-face-attribute 'default nil :font "Source Code Pro")
-  (set-face-attribute 'default nil :height 120))
+;; Autocomplete
+(when (require 'auto-complete-config nil t)
+  (add-to-list 'ac-dictionary-directories (concat user-emacs-directory "ac-dict"))
 
-(load-theme 'zenburn t)
+  (set-default 'ac-sources
+	       '(ac-source-abbrev
+		 ac-source-dictionary
+		 ac-source-yasnippet
+		 ac-source-words-in-buffer
+		 ac-source-words-in-same-mode-buffers
+		 ac-source-semantic))
 
-(global-auto-revert-mode t)
+  (ac-config-default)
+  (global-auto-complete-mode t))
 
-(provide 'emacs)
+;; Yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+(add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
+;; Link js-mode Yasnippet to js2-mode
+(add-hook 'js2-mode-hook '(lambda ()
+			    (make-local-variable 'yas-extra-modes)
+			    (add-to-list 'yas-extra-modes 'js-mode)
+			    (yas-minor-mode 1)))
 
-;;; better-defaults.el --- Fixing weird quirks and poor defaults
+;; Whitespaces
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; Copyright © 2013 Phil Hagelberg
-
-;; Author: Phil Hagelberg
-;; URL: https://github.com/technomancy/better-defaults
-;; Version: 0.1.2
-;; Created: 2013-04-16
-;; Keywords: convenience
-
-;; This file is NOT part of GNU Emacs.
-
-;;; Commentary:
-
-;; There are a number of unfortunate facts about the way Emacs works
-;; out of the box. While all users will eventually need to learn their
-;; way around in order to customize it to their particular tastes,
-;; this package attempts to address the most obvious of deficiencies
-;; in uncontroversial ways that nearly everyone can agree upon.
-
-;; Obviously there are many further tweaks you could do to improve
-;; Emacs, (like those the Starter Kit and similar packages) but this
-;; package focuses only on those that have near-universal appeal.
-
-;;; License:
-
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
-;; any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-;; Boston, MA 02110-1301, USA.
-
-;;; Code:
-
-(ido-mode t)
-(setq ido-enable-flex-matching t)
-
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
+;; Uniquify
 (require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
 
-(require 'saveplace)
-(setq-default save-place t)
+;; Flycheck
+(when (require 'flycheck nil t)
+    (add-hook 'after-init-hook #'global-flycheck-mode))
 
+;; Keybindings
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
-
-(show-paren-mode 1)
-(setq-default indent-tabs-mode nil)
-(setq x-select-enable-clipboard t
-      x-select-enable-primary t
-      save-interprogram-paste-before-kill t
-      apropos-do-all t
-      mouse-yank-at-point t
-      save-place-file (concat user-emacs-directory "places")
-      backup-directory-alist `(("." . ,(concat user-emacs-directory
-                                               "backups"))))
-(when true true);
-;;; better-defaults.el ends here
-
-;;; .emacs ends here
