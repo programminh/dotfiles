@@ -5,6 +5,10 @@
 
 
 ;;; Code:
+
+;; Disable GNU Emacs startup
+(setq inhibit-startup-message t)
+
 ;; Create the following directories if it doesn't exists
 (let* ((subdirs '("elisp" "backups" "snippets" "ac-dict"))
        (fulldirs (mapcar (lambda (d) (concat user-emacs-directory d)) subdirs)))
@@ -49,7 +53,9 @@ PACKAGES list of packages"
                           'flycheck-color-mode-line
                           'ido-vertical-mode
                           'ido-ubiquitous
+                          'helm
                           'projectile
+                          'helm-projectile
                           'multiple-cursors
                           'web-mode
                           'js2-mode
@@ -78,7 +84,7 @@ PACKAGES list of packages"
 
 (when (display-graphic-p)
   (set-face-attribute 'default nil :font "Source Code Pro")
-  (set-face-attribute 'default nil :height 140)
+  (set-face-attribute 'default nil :height 120)
   (load-theme 'zenburn t))
 
 
@@ -165,13 +171,19 @@ PACKAGES list of packages"
         ("blade"  . "\\.blade\\.")))
 
 
+;; Helm
+(require 'helm-config)
+
 ;; Projectile
 (require 'projectile)
 (projectile-global-mode)
 (setq projectile-enable-caching nil
       projectile-globally-ignored-directories '("target"))
-(global-set-key (kbd "C-x p") 'projectile-find-file)
-(global-set-key (kbd "C-c p g") 'projectile-grep)
+(setq projectile-completion-system 'helm)
+
+;; Helm Projectile
+(require 'helm-projectile)
+(helm-projectile-on)
 
 ;; Keybindings
 (global-set-key (kbd "M-/") 'hippie-expand)
