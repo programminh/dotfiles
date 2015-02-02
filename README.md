@@ -2,4 +2,4 @@
 
 List of my .dotfiles
 
-Added test for phabricator
+1. .emacs
