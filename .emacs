@@ -62,7 +62,8 @@ PACKAGES list of packages"
                           'smex
                           'yasnippet
                           'php-mode
-                          'zenburn-theme)
+                          'zenburn-theme
+                          'nginx-mode)
 
 ;; activate installed packages
 (package-initialize)
@@ -158,7 +159,7 @@ PACKAGES list of packages"
 ;; Web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
