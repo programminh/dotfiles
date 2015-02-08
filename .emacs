@@ -63,7 +63,8 @@ PACKAGES list of packages"
                           'yasnippet
                           'php-mode
                           'zenburn-theme
-                          'nginx-mode)
+                          'nginx-mode
+                          'markdown-mode)
 
 ;; activate installed packages
 (package-initialize)
@@ -85,10 +86,8 @@ PACKAGES list of packages"
 
 (when (display-graphic-p)
   (set-face-attribute 'default nil :font "Source Code Pro")
-  (set-face-attribute 'default nil :height 120)
+  (set-face-attribute 'default nil :height 140)
   (load-theme 'zenburn t))
-
-
 
 ;; Ido
 (require 'ido)
@@ -159,7 +158,6 @@ PACKAGES list of packages"
 ;; Web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
@@ -170,7 +168,6 @@ PACKAGES list of packages"
 (setq web-mode-engines-alist
       '(("php"    . "\\.phtml\\'")
         ("blade"  . "\\.blade\\.")))
-
 
 ;; Helm
 (require 'helm-config)
