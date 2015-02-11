@@ -145,8 +145,16 @@ PACKAGES list of packages"
                             (add-to-list 'yas-extra-modes 'js-mode)
                             (yas-minor-mode 1)))
 
+;; JS2-mode
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
 ;; Whitespaces
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defun delete-trailing-whitespace-unless-markdown ()
+  "Delete trailing whitespaces only if not in markdown-mode."
+  (unless (string= major-mode "markdown-mode") (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace-unless-markdown)
 
 ;; Uniquify
 (require 'uniquify)
@@ -171,6 +179,8 @@ PACKAGES list of packages"
 
 ;; Helm
 (require 'helm-config)
+(helm-mode 1)
+
 
 ;; Projectile
 (require 'projectile)
@@ -190,6 +200,7 @@ PACKAGES list of packages"
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
+
 
 (provide 'emacs)
 ;;; .emacs ends here
