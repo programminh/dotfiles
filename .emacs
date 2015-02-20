@@ -63,8 +63,9 @@ PACKAGES list of packages"
                           'yasnippet
                           'php-mode
                           'zenburn-theme
+                          'markdown-mode
                           'nginx-mode
-                          'markdown-mode)
+                          'json-mode)
 
 ;; activate installed packages
 (package-initialize)
@@ -86,8 +87,10 @@ PACKAGES list of packages"
 
 (when (display-graphic-p)
   (set-face-attribute 'default nil :font "Source Code Pro")
-  (set-face-attribute 'default nil :height 140)
+  (set-face-attribute 'default nil :height 120)
   (load-theme 'zenburn t))
+
+
 
 ;; Ido
 (require 'ido)
@@ -139,14 +142,8 @@ PACKAGES list of packages"
 (require 'yasnippet)
 (yas-global-mode 1)
 (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
-;; Link js-mode Yasnippet to js2-mode
-(add-hook 'js2-mode-hook '(lambda ()
-                            (make-local-variable 'yas-extra-modes)
-                            (add-to-list 'yas-extra-modes 'js-mode)
-                            (yas-minor-mode 1)))
 
 ;; JS2-mode
-(autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; Whitespaces
@@ -161,11 +158,14 @@ PACKAGES list of packages"
 
 ;; Flycheck
 (when (require 'flycheck nil t)
-  (add-hook 'after-init-hook #'global-flycheck-mode))
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (add-hook 'js2-mode-hook
+            (lambda () (flycheck-mode t))))
 
 ;; Web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
@@ -176,6 +176,7 @@ PACKAGES list of packages"
 (setq web-mode-engines-alist
       '(("php"    . "\\.phtml\\'")
         ("blade"  . "\\.blade\\.")))
+
 
 ;; Helm
 (require 'helm-config)
