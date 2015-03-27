@@ -63,8 +63,6 @@ PACKAGES list of packages"
                           'yasnippet
                           'php-mode
                           'zenburn-theme
-                          'markdown-mode
-                          'nginx-mode
                           'json-mode)
 
 ;; activate installed packages
@@ -145,6 +143,9 @@ PACKAGES list of packages"
 
 ;; JS2-mode
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(custom-set-variables
+ '(js2-indent-switch-body t))
+
 
 ;; Whitespaces
 (defun delete-trailing-whitespace-unless-markdown ()
@@ -159,8 +160,9 @@ PACKAGES list of packages"
 ;; Flycheck
 (when (require 'flycheck nil t)
   (add-hook 'after-init-hook #'global-flycheck-mode)
-  (add-hook 'js2-mode-hook
-            (lambda () (flycheck-mode t))))
+  (add-hook 'js2-mode-hook 'flycheck-mode))
+
+(setq flycheck-jshintrc "~/.jshintrc")
 
 ;; Web-mode
 (require 'web-mode)
@@ -205,3 +207,4 @@ PACKAGES list of packages"
 
 (provide 'emacs)
 ;;; .emacs ends here
+(put 'downcase-region 'disabled nil)

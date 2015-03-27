@@ -1,0 +1,23 @@
+[alias]
+        cp = cherry-pick
+        st = status -s
+        cl = clone
+        ci = commit
+        co = checkout
+        br = branch
+        diff = diff --word-diff
+        dc = diff --cached
+        lg = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+[user]
+	name = Truong P.
+	email = tpham@seedbox.com
+[core]
+	autocrlf = input
+[credential "https://git.seedbox.com"]
+	username = tpham
+[credential]
+    helper = cache --timeout=3600
+[branch]
+	autosetuprebase = always
+[branch "master"]
+	rebase = true
