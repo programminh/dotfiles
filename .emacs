@@ -207,4 +207,3 @@ PACKAGES list of packages"
 
 (provide 'emacs)
 ;;; .emacs ends here
-(put 'downcase-region 'disabled nil)
