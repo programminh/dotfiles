@@ -63,6 +63,7 @@ PACKAGES list of packages"
                           'yasnippet
                           'php-mode
                           'zenburn-theme
+                          'monokai-theme
                           'json-mode)
 
 ;; activate installed packages
@@ -86,9 +87,7 @@ PACKAGES list of packages"
 (when (display-graphic-p)
   (set-face-attribute 'default nil :font "Source Code Pro")
   (set-face-attribute 'default nil :height 120)
-  (load-theme 'zenburn t))
-
-
+  (load-theme 'monokai t))
 
 ;; Ido
 (require 'ido)
@@ -179,11 +178,9 @@ PACKAGES list of packages"
       '(("php"    . "\\.phtml\\'")
         ("blade"  . "\\.blade\\.")))
 
-
 ;; Helm
 (require 'helm-config)
 (helm-mode 1)
-
 
 ;; Projectile
 (require 'projectile)
@@ -203,7 +200,6 @@ PACKAGES list of packages"
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
-
 
 (provide 'emacs)
 ;;; .emacs ends here
