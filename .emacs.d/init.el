@@ -43,6 +43,9 @@
       `(("." . ,(expand-file-name
                  (concat user-emacs-directory "backups")))))
 
+;; Disable warning
+(put 'dired-find-alternate-file 'disabled nil)
+
 (require 'appearance)
 (require 'whitespace)
 (require 'uniquify)
@@ -55,3 +58,6 @@
 (require 'init-projectile)
 (require 'init-helm-projectile)
 (require 'init-company)
+(require 'init-go-mode)
+(require 'init-exec-path-from-shell)
+(require 'init-flycheck)
