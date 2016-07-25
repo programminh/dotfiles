@@ -61,3 +61,4 @@
 (require 'init-go-mode)
 (require 'init-exec-path-from-shell)
 (require 'init-flycheck)
+(require 'init-major-text-mode)
