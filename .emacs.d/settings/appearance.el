@@ -1,11 +1,11 @@
 ;; Set-up my theme
-(use-package dracula-theme
-  :ensure t  
-  :config
-  (load-theme 'dracula t))
+(use-package gotham-theme
+  :ensure t)
+
+(load-theme 'gotham t)
 
 (when (display-graphic-p)
-  (set-face-attribute 'default nil :font "Source Code Pro")
-  (set-face-attribute 'default nil :height 125))
+  (set-face-attribute 'default nil :font "Consolas")
+  (set-face-attribute 'default nil :height 145))
 
 (provide 'appearance)
