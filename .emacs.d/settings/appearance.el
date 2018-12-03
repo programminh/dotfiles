@@ -5,7 +5,6 @@
 (load-theme 'gotham t)
 
 (when (display-graphic-p)
-  (set-face-attribute 'default nil :font "Consolas")
-  (set-face-attribute 'default nil :height 145))
+  (set-face-attribute 'default nil :height 130))
 
 (provide 'appearance)

@@ -3,12 +3,10 @@
   :config
   (ido-mode t))
 
-(use-package ido-ubiquitous
+(use-package ido-completing-read+
   :ensure t
-  :init
-  (setq ido-everywhere t)
   :config
-  (ido-ubiquitous))
+  (ido-ubiquitous-mode t))
 
 (use-package ido-vertical-mode
   :ensure t
@@ -25,7 +23,3 @@
   (flx-ido-mode t))
 
 (provide 'init-ido)
-
-
-
-
