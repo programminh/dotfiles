@@ -62,17 +62,3 @@
 (require 'init-exec-path-from-shell)
 (require 'init-flycheck)
 (require 'init-major-text-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (dockerfile-mode json-mode markdown-mode flycheck-gometalinter flycheck exec-path-from-shell company-go company helm-projectile projectile helm web-mode magit multiple-cursors smex flx-ido ido-vertical-mode ido-ubiquitous use-package gotham-theme))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
