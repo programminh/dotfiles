@@ -1,12 +1,5 @@
 (use-package ido
-  :ensure t
-  :config
-  (ido-mode t))
-
-(use-package ido-completing-read+
-  :ensure t
-  :config
-  (ido-ubiquitous-mode t))
+  :ensure t)
 
 (use-package ido-vertical-mode
   :ensure t
