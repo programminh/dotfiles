@@ -18,31 +18,41 @@
          ("C-M-t" . sp-transpose-sexp)
          ("C-M-<backspace>" . sp-backward-unwrap-sexp)
          ("C-M-w" . sp-copy-sexp)
-         ("C-<right>" . sp-slurp-hybrid-sexp)
-         ("C-<left>" . sp-forward-barf-sexp)
          ("C-M-<left>" . sp-backward-slurp-sexp)
          ("C-M-<right>" . sp-backward-barf-sexp)
          ("M-F" . sp-forward-symbol)
          ("M-B" . sp-backward-symbol))
   :config
-(use-package smartparens-config))
+  (use-package smartparens-config))
 
 (use-package ac-php
   :ensure t
   :after php-mode
   :bind (:map php-mode-map
               ("C-c j" . ac-php-find-symbol-at-point)
-	      ("C-c ^" . ac-php-location-stack-back)))
+	      ("C-c ^" . ac-php-location-stack-back)
+	      ("C-c f" . helm-ac-php-apropos)
+	      ("C-c ." . helm-ac-php-apropos)))
 
 (use-package phpunit
   :ensure t
   :commands php-mode)
 
- (use-package company-php
-   :ensure t
-   :after php-mode
-   :config
-   (add-to-list 'company-backends 'company-ac-php-backend))
+(use-package web-mode
+  :ensure t
+  :after php-mode
+  :bind (:map web-mode-map
+              ("C-c j" . ac-php-find-symbol-at-point)
+	      ("C-c ^" . ac-php-location-stack-back)
+	      ("C-c f" . helm-ac-php-apropos)
+	      ("C-c ." . helm-ac-php-apropos))
+  :config (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
+
+(use-package company-php
+  :ensure t
+  :after php-mode
+  :config
+  (add-to-list 'company-backends 'company-ac-php-backend))
 
 (use-package php-mode
   :ensure t
@@ -54,6 +64,7 @@
     (company-mode +1)
     (eldoc-mode +1)
     (turn-on-auto-fill)
+    (smartparens-strict-mode +1)
     (setq flycheck-phpcs-standard "PSR2"
           flycheck-php-executable "/opt/local/bin/php"
           flycheck-php-phpcs-executable "~/.composer/vendor/bin/phpcs"
