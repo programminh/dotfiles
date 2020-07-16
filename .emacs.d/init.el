@@ -32,7 +32,7 @@
 
 (package-initialize)
 
-;; Install use-package if not installe
+;; Install use-package if not installed
 (if (not (package-installed-p 'use-package))
     (progn
       (package-refresh-contents)
