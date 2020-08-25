@@ -8,6 +8,10 @@
 ;; Disable splash screen
 (setq inhibit-startup-message t)
 
+;; Disable annoying bell sound
+(setq bell-volume 0)
+(setq visible-bell 1)
+
 ;; Set path to dependencies
 (setq settings-dir
       (expand-file-name "settings" user-emacs-directory))
