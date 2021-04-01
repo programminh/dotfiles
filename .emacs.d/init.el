@@ -73,8 +73,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (ac-php dockerfile-mode json-mode markdown-mode flycheck-gometalinter flycheck exec-path-from-shell company-go company helm-projectile projectile web-mode magit multiple-cursors smex flx-ido ido-vertical-mode ido-completing-read+ helm gotham-theme use-package))))
+   '(ac-php dockerfile-mode json-mode markdown-mode flycheck-gometalinter flycheck exec-path-from-shell company-go company helm-projectile projectile web-mode magit multiple-cursors smex flx-ido ido-vertical-mode ido-completing-read+ helm gotham-theme use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,9 +1,3 @@
-(use-package phpcbf
-  :ensure t
-  :after php-mode
-  :config
-  (setq phpcbf-standard "PSR2"))
-
 (use-package smartparens
   :ensure smartparens
   :commands (smartparens turn-on-smartparens-strict-mode)
@@ -24,15 +18,6 @@
          ("M-B" . sp-backward-symbol))
   :config
   (use-package smartparens-config))
-
-(use-package ac-php
-  :ensure t
-  :after php-mode
-  :bind (:map php-mode-map
-              ("C-c j" . ac-php-find-symbol-at-point)
-	      ("C-c ^" . ac-php-location-stack-back)
-	      ("C-c f" . helm-ac-php-apropos)
-	      ("C-c ." . helm-ac-php-apropos)))
 
 (use-package phpunit
   :ensure t
