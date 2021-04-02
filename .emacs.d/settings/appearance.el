@@ -5,6 +5,6 @@
 (load-theme 'gotham t)
 
 (when (display-graphic-p)
-  (set-face-attribute 'default nil :height 130))
+  (set-face-attribute 'default nil :height 150))
 
 (provide 'appearance)
